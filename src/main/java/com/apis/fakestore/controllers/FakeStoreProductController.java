@@ -1,7 +1,10 @@
 package com.apis.fakestore.controllers;
 
+import com.apis.fakestore.exceptions.ProductNotFoundException;
 import com.apis.fakestore.models.Product;
 import com.apis.fakestore.services.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,9 +23,15 @@ public class FakeStoreProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id){
-        return productService.getProductById(id);
-       // return new Product();
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) throws ProductNotFoundException {
+        Product product = productService.getProductById(id);
+        ResponseEntity<Product> responseEntity;
+        if(product == null){
+            responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return responseEntity;
+        }
+        responseEntity = new ResponseEntity<>(product, HttpStatus.OK);
+        return responseEntity;
     }
 
     @GetMapping("/")
