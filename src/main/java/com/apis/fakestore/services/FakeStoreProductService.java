@@ -2,6 +2,7 @@ package com.apis.fakestore.services;
 
 import com.apis.fakestore.dtos.FakeStoreProductDto;
 import com.apis.fakestore.exceptions.ProductNotFoundException;
+import com.apis.fakestore.models.Category;
 import com.apis.fakestore.models.Product;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service // either compononet or service to create an object of this servoce
+@Service("fakeStoreService") // either compononet or service to create an object of this servoce
 public class FakeStoreProductService  implements  ProductService{
     private  RestTemplate restTemplate;
 
@@ -26,7 +27,12 @@ public class FakeStoreProductService  implements  ProductService{
         product.setPrice(fakeStoreProductDto.getPrice());
         product.setDescription(fakeStoreProductDto.getDescription());
         product.setImage(fakeStoreProductDto.getImage());
-        product.setCategory(fakeStoreProductDto.getCategory());
+       // product.setCategory(fakeStoreProductDto.getCategory());
+
+        Category category = new Category();
+        category.setTitle(fakeStoreProductDto.getCategory());
+        product.setCategory(category);
+
         return product;
     }
     @Override
@@ -59,6 +65,11 @@ public class FakeStoreProductService  implements  ProductService{
     }
 
     @Override
+    public Product updateProduct(Long id, Product product) {
+        return null;
+    }
+
+    @Override
     public Product replaceProduct(Long id, Product product) {
         FakeStoreProductDto fakeStoreProductDto = new FakeStoreProductDto();
         fakeStoreProductDto.setTitle(product.getTitle());
@@ -72,6 +83,16 @@ public class FakeStoreProductService  implements  ProductService{
         FakeStoreProductDto fakeStoreProductDtoResponse = restTemplate.execute("https://fakestoreapi.com/products/" + id, HttpMethod.PUT, requestCallback, responseExtractor);
 
         return convertFakeStoreProductDtoToProduct(fakeStoreProductDtoResponse);
+    }
+
+    @Override
+    public Product createProduct(Product product) {
+        return null;
+    }
+
+    @Override
+    public void deleteProduct() {
+
     }
 
 }

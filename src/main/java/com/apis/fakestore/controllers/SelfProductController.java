@@ -12,14 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController // this controller is going to host REST HTTP API's
-@RequestMapping("/fakeStoreProducts") //localhost:8080/products
-public class FakeStoreProductController {
+@RequestMapping("/products") //localhost:8080/products
+public class SelfProductController {
 
     //@Autowried latest version it is not required
     private ProductService productService;
 
     // at the time of injection springboot needs the object of productservice so add @service for productservice
-    FakeStoreProductController(@Qualifier("fakeStoreService") ProductService productService){
+    SelfProductController(@Qualifier("selfProductService") ProductService productService){
         this.productService = productService;
     }
 
@@ -49,4 +49,9 @@ public class FakeStoreProductController {
     //deleteProduct
     //updateProduct
     //replaceProduct
+
+    @PostMapping("/create")
+   public Product createProduct(@RequestBody Product product){
+        return productService.createProduct(product);
+    }
 }
